@@ -38,8 +38,8 @@ export class Policy {
       Timestamp: timestamp.toUTCString(),
       UpdatedBy: "",
       AdaptionPolicy: {
-        ContentFlags: {
-          ExcelContentFlags: {
+        ContentManagementFlags: {
+          ExcelContentManagement: {
             DynamicDataExchange: randomEnum(ContentFlagAction),
             EmbeddedFiles: randomEnum(ContentFlagAction),
             EmbeddedImages: randomEnum(ContentFlagAction),
@@ -49,7 +49,7 @@ export class Policy {
             Metadata: randomEnum(ContentFlagAction),
             ReviewComments: randomEnum(ContentFlagAction)
           },
-          PdfContentFlags: {
+          PdfContentManagement: {
             EmbeddedFiles: randomEnum(ContentFlagAction),
             EmbeddedImages: randomEnum(ContentFlagAction),
             ExternalHyperlinks: randomEnum(ContentFlagAction),
@@ -59,7 +59,7 @@ export class Policy {
             ActionsAll: randomEnum(ContentFlagAction),
             Javascript: randomEnum(ContentFlagAction)
           },
-          PowerPointContentFlags: {
+          PowerPointContentManagement: {
             EmbeddedFiles: randomEnum(ContentFlagAction),
             EmbeddedImages: randomEnum(ContentFlagAction),
             ExternalHyperlinks: randomEnum(ContentFlagAction),
@@ -69,7 +69,7 @@ export class Policy {
             ReviewComments: randomEnum(ContentFlagAction)
 
           },
-          WordContentFlags: {
+          WordContentManagement: {
             DynamicDataExchange: randomEnum(ContentFlagAction),
             EmbeddedFiles: randomEnum(ContentFlagAction),
             EmbeddedImages: randomEnum(ContentFlagAction),
@@ -133,14 +133,14 @@ export enum PolicyState {
 }
 
 export class AdaptionPolicy {
-  ContentFlags: ContentFlags;
+  ContentManagementFlags: ContentFlags;
 }
 
 export class ContentFlags {
-  PdfContentFlags: PdfContentFlags;
-  WordContentFlags: WordContentFlags;
-  ExcelContentFlags: ExcelContentFlags;
-  PowerPointContentFlags: PowerPointContentFlags;
+  PdfContentManagement: PdfContentFlags;
+  WordContentManagement: WordContentFlags;
+  ExcelContentManagement: ExcelContentFlags;
+  PowerPointContentManagement: PowerPointContentFlags;
 }
 
 export class ExcelContentFlags {
