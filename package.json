@@ -1,0 +1,51 @@
+{
+  "name": "policy-management-api-static-data-cli",
+  "version": "1.3.0",
+  "description": "A command line tool that generates policy data in an azure file share",
+  "scripts": {
+    "build": "npm run clean && tsc && cpx package.json dist/src",
+    "watch": "tsc -w",
+    "clean": "node_modules/.bin/rimraf ./dist",
+    "prestart": "npm run build",
+    "start": "node dist/src/index.js",
+    "dist": "npm run build && cd dist/src && npm publish"
+  },
+  "keywords": [
+    "typescript",
+    "tsc",
+    "random",
+    "file",
+    "generator",
+    "test data"
+  ],
+  "repository": {
+    "directory": "",
+    "type": "git",
+    "url": "https://github.com/filetrust/policy-management-api-static-data"
+  },
+  "bin": {
+    "eventctl": "index.js"
+  },
+  "preferGlobal": true,
+  "dependencies": {
+    "@azure/storage-file-share": "^12.2.0",
+    "commander": "^6.1.0",
+    "cpx": "^1.5.0",
+    "form-data": "^3.0.0",
+    "node-fetch": "^2.6.0",
+    "path": "^0.12.7",
+    "rimraf": "^3.0.2",
+    "shx": "^0.3.2",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.5",
+    "uuid": "^8.3.1"
+  },
+  "devDependencies": {
+    "@types/form-data": "^2.5.0",
+    "@types/node": "^13.1.8",
+    "@types/uuid": "^8.3.0",
+    "@typescript-eslint/eslint-plugin": "^2.26.0",
+    "@typescript-eslint/parser": "^2.26.0",
+    "tslint": "^6.1.3"
+  }
+}
