@@ -1,5 +1,5 @@
 import AzureFileShareService from "./azureFileShareService";
-import { Policy, PolicyState } from "../models/policy";
+import { Policy, PolicyType } from "../models/policy";
 
 const jsonBuffer = (obj: any) => {
     const json = JSON.stringify(obj);
@@ -19,26 +19,26 @@ export default class StaticDataService {
         for (let i = 0; i < this.amountOfHistoricalPolicies; i++) {
             const policy = Policy.Historic(new Date());
             const fileDirectory = this.getFileDirectory(policy);
-            console.log(`Generating historical policy for timestamp '${policy.Timestamp}' ${fileDirectory}`);
+            console.log(`Generating historical policy for timestamp '${policy.LastEdited}' ${fileDirectory}`);
             await this.shareService.uploadFile(fileDirectory, "policy.json", jsonBuffer(policy));
         }
         
         const draftpolicy = Policy.Draft(new Date());
         const draftpolicyfileDirectory = this.getFileDirectory(draftpolicy);
-        console.log(`Generating draft policy for timestamp '${draftpolicy.Timestamp}' ${draftpolicyfileDirectory}`);
+        console.log(`Generating draft policy for timestamp '${draftpolicy.LastEdited}' ${draftpolicyfileDirectory}`);
         await this.shareService.uploadFile(draftpolicyfileDirectory, "policy.json", jsonBuffer(draftpolicy));
         
         const policy = Policy.Current(new Date());
         const fileDirectory = this.getFileDirectory(policy);
-        console.log(`Generating published policy for timestamp '${policy.Timestamp}' ${fileDirectory}`);
+        console.log(`Generating published policy for timestamp '${policy.LastEdited}' ${fileDirectory}`);
         await this.shareService.uploadFile(fileDirectory, "policy.json", jsonBuffer(policy));
     }
 
     private getFileDirectory(policy: Policy): string {
-        if (policy.PolicyState === PolicyState.Draft) 
+        if (policy.PolicyType === PolicyType.Draft) 
              return "draft";             
 
-        if (policy.PolicyState === PolicyState.Published) 
+        if (policy.PolicyType === PolicyType.Current) 
             return "current";
 
         return `historical/${policy.Id}`;

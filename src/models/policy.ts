@@ -13,29 +13,30 @@ export class Policy {
   static Historic(timestamp: Date): Policy {
     const policy = Policy.Base(timestamp);
     policy.UpdatedBy = "historical.user@users.com";
-    policy.PolicyState = PolicyState.Historical;
+    policy.PolicyType = PolicyType.Historical;
     return policy;
   }
   
   static Draft(timestamp: Date): Policy {
     const policy = Policy.Base(timestamp);
     policy.UpdatedBy = "draft.editor@users.com";
-    policy.PolicyState = PolicyState.Draft;
+    policy.PolicyType = PolicyType.Draft;
     return policy;
   }
 
   static Current(timestamp: Date): Policy {
     const historicalPolicy = Policy.Base(timestamp);
     historicalPolicy.UpdatedBy = "publisher@users.com";
-    historicalPolicy.PolicyState = PolicyState.Published;
+    historicalPolicy.PolicyType = PolicyType.Current;
     return historicalPolicy;
   }
 
   private static Base(timestamp: Date) {
     return {
       Id: Guid(),
-      PolicyState: PolicyState.Historical,
-      Timestamp: timestamp.toUTCString(),
+      PolicyType: PolicyType.Historical,
+      LastEdited: timestamp.toUTCString(),
+      Created: timestamp.toUTCString(),
       UpdatedBy: "",
       AdaptionPolicy: {
         ContentManagementFlags: {
@@ -98,10 +99,12 @@ export class Policy {
   }
   Id: string;
 
-  PolicyState: PolicyState;
+  PolicyType: PolicyType;
 
-  Timestamp: string;
+  LastEdited: string;
 
+  Created: string;
+  
   UpdatedBy: string;
 
   AdaptionPolicy: AdaptionPolicy;
@@ -126,9 +129,9 @@ export enum NcfsOption {
   Refer
 }
 
-export enum PolicyState {
+export enum PolicyType {
   Draft,
-  Published,
+  Current,
   Historical
 }
 
