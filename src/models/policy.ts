@@ -28,6 +28,7 @@ export class Policy {
     const historicalPolicy = Policy.Base(timestamp);
     historicalPolicy.UpdatedBy = "publisher@users.com";
     historicalPolicy.PolicyType = PolicyType.Current;
+    historicalPolicy.Published = timestamp.toUTCString();
     return historicalPolicy;
   }
 
@@ -35,6 +36,7 @@ export class Policy {
     return {
       Id: Guid(),
       PolicyType: PolicyType.Historical,
+      Published: null,
       LastEdited: timestamp.toUTCString(),
       Created: timestamp.toUTCString(),
       UpdatedBy: "",
@@ -80,26 +82,28 @@ export class Policy {
             Metadata: randomEnum(ContentFlagAction),
             ReviewComments: randomEnum(ContentFlagAction)
           }
-        }
-      },
-      NcfsPolicy: {
-        Options: {
-          GlasswallBlockedFiles: randomEnum(NcfsOption),
-          UnProcessableFileTypes: randomEnum(NcfsOption)
         },
-        Routes: Array.apply(null, Array(Math.floor(Math.random() * 10))).map(() => {
-          return {
-            ApiUrl: Guid(),
+        NcfsActions: {
+          GlasswallBlockedFilesAction: randomEnum(NcfsOption),
+          UnprocessableFileTypeAction: randomEnum(NcfsOption)
+        },
+        NcfsRoute: {
+            NcfsRoutingUrl: Guid(),
             IsDeleted: Math.random() >= 0.5,
             IsValidated: Math.random() >= 0.5
-          };
-        })
+        },
+        ErrorReportTemplate: "Please contact your administrator for more information."
+      },
+      NcfsPolicy: {
+        NcfsDecision: randomEnum(NcfsDecision)
       }
     };
   }
   Id: string;
 
   PolicyType: PolicyType;
+  
+  Published: PolicyType;
 
   LastEdited: string;
 
@@ -113,14 +117,18 @@ export class Policy {
 }
 
 export class NcfsPolicy {
-  Routes: NcfsRoute[];
-
-  Options: NcfsOptions;
+  NcfsDecision: NcfsDecision
 }
 
-export class NcfsOptions {
-  UnProcessableFileTypes: NcfsOption;
-  GlasswallBlockedFiles: NcfsOption;
+export enum NcfsDecision {
+  Relay,
+  Replace,
+  Block
+}
+
+export class NcfsActions {
+  UnprocessableFileTypeAction: NcfsOption;
+  GlasswallBlockedFilesAction: NcfsOption;
 }
 
 export enum NcfsOption {
@@ -136,17 +144,20 @@ export enum PolicyType {
 }
 
 export class AdaptionPolicy {
-  ContentManagementFlags: ContentFlags;
+  ContentManagementFlags: ContentManagementFlags;
+  ErrorReportTemplate: string;
+  NcfsRoute: NcfsRoute;
+  NcfsActions: NcfsActions;
 }
 
-export class ContentFlags {
-  PdfContentManagement: PdfContentFlags;
-  WordContentManagement: WordContentFlags;
-  ExcelContentManagement: ExcelContentFlags;
-  PowerPointContentManagement: PowerPointContentFlags;
+export class ContentManagementFlags {
+  PdfContentManagement: PdfContentManagement;
+  WordContentManagement: WordContentManagement;
+  ExcelContentManagement: ExcelContentManagement;
+  PowerPointContentManagement: PowerPointContentManagement;
 }
 
-export class ExcelContentFlags {
+export class ExcelContentManagement {
   DynamicDataExchange: ContentFlagAction;
   EmbeddedFiles: ContentFlagAction;
   EmbeddedImages: ContentFlagAction;
@@ -157,7 +168,7 @@ export class ExcelContentFlags {
   ReviewComments: ContentFlagAction;
 }
 
-export class PdfContentFlags {
+export class PdfContentManagement {
   Acroform: ContentFlagAction;
   ActionsAll: ContentFlagAction;
   EmbeddedFiles: ContentFlagAction;
@@ -168,7 +179,7 @@ export class PdfContentFlags {
   Metadata: ContentFlagAction;
 }
 
-export class PowerPointContentFlags {
+export class PowerPointContentManagement {
   EmbeddedFiles: ContentFlagAction;
   EmbeddedImages: ContentFlagAction;
   ExternalHyperlinks: ContentFlagAction;
@@ -178,7 +189,7 @@ export class PowerPointContentFlags {
   ReviewComments: ContentFlagAction;
 }
 
-export class WordContentFlags {
+export class WordContentManagement {
   DynamicDataExchange: ContentFlagAction;
   EmbeddedFiles: ContentFlagAction;
   EmbeddedImages: ContentFlagAction;
@@ -194,7 +205,7 @@ export enum ContentFlagAction {
 }
 
 export class NcfsRoute {
-  ApiUrl: string;
+  NcfsRoutingUrl: string;
 
   IsDeleted: boolean;
 
